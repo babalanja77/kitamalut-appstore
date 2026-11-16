@@ -46,6 +46,17 @@ function makeCard(app) {
   bottom.append(open); article.append(bottom);
   return article;
 }
+function trustedPlayUrl(raw, packageId) {
+  if (typeof raw !== 'string' || typeof packageId !== 'string') return null;
+  if (!/^[a-zA-Z][\w]*(?:\.[a-zA-Z][\w]*)+$/.test(packageId)) return null;
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== 'https:' || url.hostname !== 'play.google.com' ||
+        url.pathname !== '/store/apps/details' || url.username || url.password ||
+        url.searchParams.get('id') !== packageId) return null;
+    return url.href;
+  } catch { return null; }
+}
 function showDetail(app) {
   body.replaceChildren();
   const top=plain('div','detail-top');
@@ -54,14 +65,28 @@ function showDetail(app) {
   const info=plain('div'); const title=plain('h2','',app.name);title.id='detail-title';
   info.append(title, plain('p','detail-developer',app.developer_name));top.append(logo,info);
   body.append(top,plain('p','detail-description',app.short_description),plain('p','detail-meta',`Kategori: ${app.category || 'Aplikasi'}  ·  Versi: ${app.version_name || '—'}  ·  ${formatBytes(app.file_size_bytes)}`));
-  const link=plain('a','download-btn','Unduh APK  ↓');
-  const slug=String(app.slug || '');
-  if (/^[a-z0-9](?:[a-z0-9-]{0,118}[a-z0-9])?$/.test(slug)) {
-    link.href=`/api/download/${encodeURIComponent(slug)}`;
-    link.rel='nofollow';
-    body.append(link);
-  } else body.append(plain('p','detail-unavailable','Unduhan sementara tidak tersedia.'));
-  body.append(plain('p','detail-note','File Android (APK) dipasang atas persetujuan Anda. Periksa izin yang diminta aplikasi.'));
+  const playUrl = app.play_store_status === 'available' ? trustedPlayUrl(app.play_store_url, app.package_id) : null;
+  const slug = String(app.slug || '');
+  const apkReady = app.apk_available === true && /^[a-z0-9](?:[a-z0-9-]{0,118}[a-z0-9])?$/.test(slug);
+  const actions = plain('div','install-actions');
+  if (playUrl) {
+    const play = plain('a', 'download-btn play-btn', 'Instal melalui Google Play ↗');
+    play.href = playUrl;
+    play.target = '_blank';
+    play.rel = 'noopener noreferrer';
+    actions.append(play);
+  }
+  if (apkReady) {
+    const fallback = plain('a', playUrl ? 'download-btn apk-backup-btn' : 'download-btn',
+      playUrl ? 'Unduh APK Resmi (alternatif) ↓' : 'Unduh APK Resmi ↓');
+    fallback.href = `/api/download/${encodeURIComponent(slug)}`;
+    fallback.rel = 'nofollow';
+    actions.append(fallback);
+  }
+  if (actions.children.length) body.append(actions);
+  else body.append(plain('p','detail-unavailable','Belum ada jalur instalasi yang tersedia untuk aplikasi ini.'));
+  if (apkReady) body.append(plain('p','detail-note','APK cadangan diperuntukkan bagi pengguna yang tidak dapat memasang melalui Google Play. Pastikan aplikasi berasal dari sumber resmi dan periksa izin pemasangannya.'));
+  if (playUrl) body.append(plain('p','detail-note','Google Play tetap menjadi sumber instalasi dan pembaruan yang diutamakan. Ketersediaan dapat berbeda menurut perangkat dan negara.'));
   dialog.showModal();
 }
 function render() {

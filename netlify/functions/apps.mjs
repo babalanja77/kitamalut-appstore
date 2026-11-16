@@ -1,5 +1,5 @@
 // Public read-only catalog endpoint: GET /api/apps
-// Only apps with an approved, malware-screened, published release are visible.
+// Only officially listed Play apps and/or APK releases that passed approval and security checks are visible.
 // IMPORTANT: This does not implement upload, download, admin auth, or scanning.
 import { neon } from '@neondatabase/serverless';
 
@@ -20,23 +20,34 @@ export default async function handler(request) {
   try {
     const sql = neon(connectionString);
     const apps = await sql`
-      SELECT a.id, a.slug, a.name, a.developer_name,
-             a.short_description, a.featured,
-             ('/api/download/' || a.slug) AS download_path,
+      SELECT a.id, a.slug, a.package_id, a.name, a.developer_name,
+             a.short_description, a.featured, a.play_store_status,
+             CASE WHEN a.play_store_status = 'available'
+                       AND a.package_id ~ '^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z][A-Za-z0-9_]*)+$'
+                  THEN ('https://play.google.com/store/apps/details?id=' || a.package_id)
+                  ELSE NULL END AS play_store_url,
+             (r.id IS NOT NULL) AS apk_available,
+             CASE WHEN r.id IS NOT NULL THEN ('/api/download/' || a.slug)
+                  ELSE NULL END AS download_path,
              c.name AS category, r.version_name, r.file_size_bytes,
              r.published_at
       FROM apps a
-      INNER JOIN releases r ON r.app_id = a.id
+      LEFT JOIN LATERAL (
+        SELECT r.* FROM releases r
+        WHERE r.app_id = a.id AND r.workflow_status = 'published'
+          AND r.scan_status = 'passed' AND r.sha256 IS NOT NULL
+          AND r.approved_by IS NOT NULL AND r.storage_provider = 'github_releases'
+          AND r.github_release_id IS NOT NULL AND r.github_asset_id IS NOT NULL
+        ORDER BY r.published_at DESC LIMIT 1
+      ) r ON TRUE
       LEFT JOIN categories c ON c.id = a.category_id
       WHERE a.is_listed = TRUE
-        AND r.workflow_status = 'published'
-        AND r.scan_status = 'passed'
-        AND r.sha256 IS NOT NULL
-        AND r.approved_by IS NOT NULL
-        AND r.storage_provider = 'github_releases'
-        AND r.github_release_id IS NOT NULL
-        AND r.github_asset_id IS NOT NULL
-      ORDER BY a.featured DESC, r.published_at DESC NULLS LAST
+        AND (
+          (a.play_store_status = 'available' AND
+           a.package_id ~ '^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z][A-Za-z0-9_]*)+$')
+          OR r.id IS NOT NULL
+        )
+      ORDER BY a.featured DESC, r.published_at DESC NULLS LAST, a.name ASC
       LIMIT ${limit}
     `;
     return json({ apps, count: apps.length });
