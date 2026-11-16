@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f9fc" />
+  <meta name="description" content="Prototipe lokal KITAMALUT APP STORE. Katalog aplikasi dan dashboard Owner/Admin." />
+  <title>KITAMALUT APP STORE — Prototipe Lokal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="demo-banner" role="status"><span class="live-dot"></span> PROTOTIPE LOKAL — file APK tidak dikirim ke server, publikasi hanya simulasi</div>
+  <div class="shell" id="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
+      <button class="brand" data-action="go-home" aria-label="Beranda KITAMALUT APP STORE">
+        <span class="brand-logo"><span>K</span></span>
+        <span class="brand-type"><b>KITAMALUT</b><small>APP STORE</small></span>
+      </button>
+      <div class="sidebar-caption">MENU TOKO</div>
+      <nav class="side-nav" id="store-nav">
+        <button class="nav-item active" data-action="go-home"><span>⌂</span> Beranda</button>
+        <button class="nav-item" data-action="go-apps"><span>▦</span> Semua Aplikasi</button>
+        <button class="nav-item" data-action="go-category" data-category="Produktivitas"><span>◫</span> Produktivitas</button>
+        <button class="nav-item" data-action="go-category" data-category="Bisnis"><span>◈</span> Bisnis & UMKM</button>
+        <button class="nav-item" data-action="go-category" data-category="Pendidikan"><span>▤</span> Pendidikan</button>
+        <button class="nav-item" data-action="go-category" data-category="Alat & Utilitas"><span>⚙</span> Alat & Utilitas</button>
+      </nav>
+      <div class="sidebar-caption owner-caption">PENGELOLAAN</div>
+      <nav class="side-nav" id="owner-nav">
+        <button class="nav-item" data-action="go-admin"><span>▣</span> Dashboard Owner <span class="nav-pill">DEMO</span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="mini-help"><div class="mini-help-icon">✦</div><b>Platform aplikasi lokal</b><p>Wadah untuk aplikasi karya Anda dan developer pilihan.</p><span>Versi konsep 0.1</span></div></div>
+    </aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-logo small">K</span><span>KITAMALUT <b>APP STORE</b></span></div>
+        <div class="searchbox"><span class="search-icon" aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Cari aplikasi, kategori, atau developer..." aria-label="Cari aplikasi" autocomplete="off"/><kbd>⌘ K</kbd></div>
+        <div class="header-actions">
+          <button class="header-circle" id="theme-button" title="Ubah tema" aria-label="Ubah tema">☾</button>
+          <button class="header-owner" data-action="go-admin"><span>⚙</span><span class="owner-label">Dashboard Owner</span></button>
+        </div>
+      </header>
+      <main id="main-content" tabindex="-1"></main>
+      <footer class="footer"><div><strong>KITAMALUT APP STORE</strong> · Prototipe khusus demonstrasi</div><div>Hak cipta dan distribusi APK harus diverifikasi sebelum publikasi.</div></footer>
+    </div>
+  </div>
+  <nav class="mobile-bottom" aria-label="Navigasi mobile">
+    <button data-action="go-home" class="mobile-nav-item active"><span>⌂</span>Beranda</button>
+    <button data-action="go-apps" class="mobile-nav-item"><span>▦</span>Aplikasi</button>
+    <button data-action="go-category" data-category="Bisnis" class="mobile-nav-item"><span>◈</span>Bisnis</button>
+    <button data-action="go-admin" class="mobile-nav-item"><span>⚙</span>Owner</button>
+  </nav>
+  <div id="modal-root"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
