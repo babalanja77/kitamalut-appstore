@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1024">
+  <meta name="description" content="KITAMALUT APP STORE: temukan aplikasi Android untuk usaha, pendidikan, dan produktivitas.">
+  <meta name="robots" content="index,follow">
+  <title>KITAMALUT APP STORE — Temukan Aplikasi</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/store.css">
+  <script type="module" src="/store.js"></script>
+</head>
+<body>
+  <a class="skip" href="#katalog">Lewati navigasi</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="KITAMALUT APP STORE, beranda">
+        <span class="brand-icon" aria-hidden="true">K</span>
+        <span class="brand-name">KITAMALUT<small>APP STORE</small></span>
+      </a>
+      <div class="nav-label">JELAJAHI</div>
+      <nav aria-label="Kategori aplikasi" id="category-nav">
+        <button class="nav-link selected" type="button" data-category="Semua"><span aria-hidden="true">◈</span> Semua Aplikasi</button>
+        <button class="nav-link" type="button" data-category="Produktivitas"><span aria-hidden="true">▦</span> Produktivitas</button>
+        <button class="nav-link" type="button" data-category="Bisnis"><span aria-hidden="true">▤</span> Bisnis & UMKM</button>
+        <button class="nav-link" type="button" data-category="Pendidikan"><span aria-hidden="true">▥</span> Pendidikan</button>
+        <button class="nav-link" type="button" data-category="Alat & Utilitas"><span aria-hidden="true">⚙</span> Alat & Utilitas</button>
+      </nav>
+      <div class="sidebar-note"><span aria-hidden="true">✦</span><div><strong>Dibuat untuk berkembang</strong><p>Pilihan aplikasi untuk kebutuhan digital sehari-hari.</p></div></div>
+    </aside>
+
+    <div class="content-shell">
+      <header class="header">
+        <a class="mobile-brand" href="/"><span class="brand-icon small">K</span><strong>KITAMALUT <span>APP STORE</span></strong></a>
+        <label class="search"><span aria-hidden="true">⌕</span><span class="visually-hidden">Cari aplikasi</span><input type="search" id="search" autocomplete="off" placeholder="Cari aplikasi atau developer..." maxlength="100"></label>
+        <span class="header-label">Katalog Aplikasi</span>
+      </header>
+      <main id="katalog">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy"><span class="eyebrow"><span aria-hidden="true">✦</span> JELAJAHI APLIKASI</span><h1 id="hero-title">Aplikasi pilihan,<br><em>semua dalam satu tempat.</em></h1><p>Temukan aplikasi untuk produktivitas, bisnis, pendidikan, dan kebutuhan sehari-hari.</p><a class="hero-cta" href="#daftar-aplikasi">Jelajahi Aplikasi <span aria-hidden="true">↗</span></a></div>
+          <div class="hero-art" aria-hidden="true"><span class="orbit orbit-a"></span><span class="orbit orbit-b"></span><span class="hero-logo">K</span><span class="floating-tile tile-a">▥</span><span class="floating-tile tile-b">✦</span><span class="floating-tile tile-c">▦</span></div>
+        </section>
+        <section id="daftar-aplikasi" class="listing" aria-labelledby="listing-title">
+          <div class="section-top"><div><span class="eyebrow subtle">KATALOG</span><h2 id="listing-title">Temukan aplikasi</h2><p id="listing-subtitle">Jelajahi koleksi aplikasi terbaru.</p></div><span class="app-total" id="count" aria-live="polite"></span></div>
+          <div class="category-chips" id="category-chips" aria-label="Filter kategori">
+            <button class="chip active" type="button" data-category="Semua">Semua</button>
+            <button class="chip" type="button" data-category="Produktivitas">Produktivitas</button>
+            <button class="chip" type="button" data-category="Bisnis">Bisnis</button>
+            <button class="chip" type="button" data-category="Pendidikan">Pendidikan</button>
+            <button class="chip" type="button" data-category="Alat & Utilitas">Utilitas</button>
+          </div>
+          <div id="catalog-status" class="status" role="status" aria-live="polite">Memuat katalog aplikasi...</div>
+          <div id="app-grid" class="app-grid" hidden></div>
+        </section>
+      </main>
+      <footer class="footer"><div><strong>KITAMALUT APP STORE</strong><span>Tempat menemukan aplikasi Android.</span></div><small>Unduh aplikasi hanya dari sumber yang Anda percayai. Pemasangan APK memerlukan persetujuan Android.</small></footer>
+    </div>
+  </div>
+  <nav class="mobile-nav" aria-label="Navigasi bawah"><a href="/" aria-current="page"><span aria-hidden="true">⌂</span>Beranda</a><a href="#daftar-aplikasi"><span aria-hidden="true">▦</span>Aplikasi</a><a href="#daftar-aplikasi" id="bottom-business"><span aria-hidden="true">◈</span>Bisnis</a></nav>
+  <dialog id="app-detail" aria-labelledby="detail-title"><div class="detail-inner"><button class="close" type="button" id="close-detail" aria-label="Tutup detail">✕</button><div id="detail-body"></div></div></dialog>
+</body>
+</html>

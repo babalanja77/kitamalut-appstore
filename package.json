@@ -1,12 +1,12 @@
 {
   "name": "kitamalut-appstore",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "KITAMALUT APP STORE: demo website and future API (not deployed)",
+  "description": "KITAMALUT APP STORE: public storefront isolated from private admin development; not deployed",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node --check app.js && node --check netlify/functions/apps.mjs && node --check netlify/functions/download.mjs && node --check lib/github-releases.mjs && node --check scripts/build.mjs",
+    "check": "node --check public/store.js && node --check netlify/functions/apps.mjs && node --check netlify/functions/download.mjs && node --check lib/github-releases.mjs && node --check scripts/build.mjs",
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {

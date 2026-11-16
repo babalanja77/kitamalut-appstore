@@ -72,3 +72,13 @@ docs/RANCANGAN.md   arsitektur, hak akses, alur APK, keamanan, API, uji rilis
 - `npm test`: pengujian mock untuk penolakan unduhan yang tidak cocok.
 
 **Penting:** GitHub Releases publik tidak dapat menjadi karantina malware dan bukan sistem pencabutan akses; menarik aplikasi dari katalog saja tidak menghapus file publik GitHub. Dashboard upload/publish masih prototipe, bukan integrasi server.
+
+## Persiapan tampilan pelanggan (audit 16 November 2026)
+
+**Jangan deploy untuk pelanggan dulu.** Build publik kini terpisah dari dashboard prototype.
+- `public/index.html`, `public/store.css`, `public/store.js`, `public/favicon.svg` adalah antarmuka toko yang akan diterima pelanggan.
+- `npm run build` menyalin hanya empat file publik tersebut ke `dist/` — prototipe admin, data fiktif, dan tanda DEMO tidak diikutsertakan.
+- `public/store.js` membaca hanya endpoint `/api/apps` yang mengembalikan aplikasi telah diverifikasi; saat belum ada aplikasi, tidak ada konten palsu.
+- Owner/admin masih memerlukan sistem login dan backend yang benar; dashboard prototype **bukan panel produksi**.
+- GitHub Releases tetap hanya penyimpanan **distribusi publik** untuk APK sesudah verifikasi, bukan tempat mengunggah APK karantina.
+- Audit readiness lengkap ada di `docs/RELEASE_GATE.md`. Status masih NO-GO; belum ada deploy ataupun publikasi APK.
