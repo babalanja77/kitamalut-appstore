@@ -22,6 +22,7 @@ export default async function handler(request) {
     const apps = await sql`
       SELECT a.id, a.slug, a.name, a.developer_name,
              a.short_description, a.featured, a.icon_object_key,
+             ('/api/download/' || a.slug) AS download_path,
              c.name AS category, r.version_name, r.file_size_bytes,
              r.published_at
       FROM apps a
@@ -31,6 +32,10 @@ export default async function handler(request) {
         AND r.workflow_status = 'published'
         AND r.scan_status = 'passed'
         AND r.sha256 IS NOT NULL
+        AND r.approved_by IS NOT NULL
+        AND r.storage_provider = 'github_releases'
+        AND r.github_release_id IS NOT NULL
+        AND r.github_asset_id IS NOT NULL
       ORDER BY a.featured DESC, r.published_at DESC NULLS LAST
       LIMIT ${limit}
     `;

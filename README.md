@@ -29,7 +29,7 @@ Lalu buka `http://localhost:8080`.
 ## Apa yang Belum Berfungsi?
 
 - Login admin, autentikasi dan otorisasi server.
-- Upload APK dan media ke Cloudflare R2; penyimpanan Neon.
+- Upload APK dan media ke GitHub Releases / staging privat; dashboard belum terhubung ke Neon.
 - Malware scan, apksigner, pemeriksaan signature, checksum SHA256 otomatis dan keamanan sesungguhnya.
 - Download APK, rating nyata, statistik unduhan nyata, publish internet.
 - Kontrol keamanan produksi, logging server, backup, deployment.
@@ -54,9 +54,21 @@ docs/RANCANGAN.md   arsitektur, hak akses, alur APK, keamanan, API, uji rilis
 - Cabang pengembangan GitHub: `demo` (untuk perubahan berikutnya; cek sinkronisasi sebelum penggunaan).
 - Neon project: `kitamalut-appstore`; branch DEMO `kitamalut-demo` berisi tabel dasar skema. Cabang produksi tidak diubah.
 - Netlify: proyek kosong `kitamalut-appstore-demo` sudah dibuat **tanpa deploy**. Pengaturan build dan **endpoint katalog READ-ONLY** tersedia di kode, tetapi GitHub belum ditautkan sebagai sumber deployment dan `DATABASE_URL` belum dikonfigurasi.
-- Cloudflare R2: **belum tersedia**; Cloudflare mengembalikan pesan harus mengaktifkan R2 lewat dashboard. Pengaktifan memerlukan pemilik akun.
+- Cloudflare R2 tidak dipakai. Penyimpanan distribusi APK dialihkan ke GitHub Releases. File staging privat, scanning, dan penerbitan otomatis belum tersedia.
 - Kredensial koneksi Neon → Netlify tidak berhasil disetel otomatis karena pembatasan keamanan. Tidak ada password yang ditampilkan atau disimpan dalam repo.
 - `netlify/functions/apps.mjs` hanya akan menyajikan aplikasi yang benar-benar terbit dan telah lolos scan. Tidak ada data demo terbit dalam database.
 - Formulir dashboard Owner saat ini masih simulasi berbasis `localStorage`, **bukan** CRUD Neon; login, upload, scan dan download APK sungguhan belum tersedia.
 - Build dengan `npm run build`; direktori `dist/` hanya berisi HTML/CSS/JS agar dokumentasi dan schema tidak dipublikasikan sebagai aset.
-- **Jangan deploy ke publik atau mengisi DATABASE_URL produksi sebelum autentikasi admin, mekanisme scan, R2 privat, dan QA diterapkan.**
+- **Jangan deploy ke publik atau mengisi DATABASE_URL produksi sebelum autentikasi admin, mekanisme scan, staging privat, pemindaian, dan QA diterapkan.**
+
+## Pengembangan DEMO: GitHub Releases
+
+- Pengembangan dilakukan pada GitHub branch `demo`; `main` dan Netlify live tidak disentuh.
+- Cabang Neon `kitamalut-demo` mendapatkan metadata GitHub release dan constraint publikasi. Tidak ada perubahan pada Neon production.
+- `lib/github-releases.mjs`: pemeriksaan ketat release/asset GitHub sebelum redirect.
+- `netlify/functions/download.mjs`: endpoint unduhan baca-saja berdasarkan metadata yang diverifikasi dalam Neon. **Belum dapat dipakai online tanpa deployment dan koneksi DATABASE_URL**.
+- `migrations/2026-11-16_github_releases.sql`: perubahan skema untuk Neon DEMO.
+- `docs/GITHUB_RELEASES.md`: alur integrasi lengkap, keamanan, batasan, dan pekerjaan lanjutan.
+- `npm test`: pengujian mock untuk penolakan unduhan yang tidak cocok.
+
+**Penting:** GitHub Releases publik tidak dapat menjadi karantina malware dan bukan sistem pencabutan akses; menarik aplikasi dari katalog saja tidak menghapus file publik GitHub. Dashboard upload/publish masih prototipe, bukan integrasi server.
