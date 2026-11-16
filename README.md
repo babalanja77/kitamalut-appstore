@@ -47,3 +47,15 @@ docs/RANCANGAN.md   arsitektur, hak akses, alur APK, keamanan, API, uji rilis
 ```
 
 **Status:** tidak ada aksi deploy; tidak ada database atau layanan luar yang diubah.
+
+## Penyiapan Integrasi (16 November 2026)
+
+- Repository GitHub: `babalanja77/kitamalut-appstore` (prototipe disimpan, **bukan deploy**).
+- Cabang pengembangan GitHub: `demo` (untuk perubahan berikutnya; cek sinkronisasi sebelum penggunaan).
+- Neon project: `kitamalut-appstore`; branch DEMO `kitamalut-demo` berisi tabel dasar skema. Cabang produksi tidak diubah.
+- Netlify: pengaturan build dan **endpoint katalog READ-ONLY** telah disiapkan di kode. Belum ada Netlify site ataupun environment variable yang ditautkan.
+- Cloudflare R2: **belum tersedia**; Cloudflare mengembalikan pesan harus mengaktifkan R2 lewat dashboard.
+- `netlify/functions/apps.mjs` hanya akan menyajikan aplikasi yang benar-benar terbit dan telah lolos scan. Tidak ada data demo terbit dalam database.
+- Formulir dashboard Owner saat ini masih simulasi berbasis `localStorage`, **bukan** CRUD Neon; login, upload, scan dan download APK sungguhan belum tersedia.
+- Build dengan `npm run build`; direktori `dist/` hanya berisi HTML/CSS/JS agar dokumentasi dan schema tidak dipublikasikan sebagai aset.
+- **Jangan deploy ke publik atau mengisi DATABASE_URL produksi sebelum autentikasi admin, mekanisme scan, R2 privat, dan QA diterapkan.**
